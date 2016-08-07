@@ -2,7 +2,7 @@ const webpack = require('webpack');
 
 exports.devServer = function(options) {
 	return {
-		devserver: {
+		devServer: {
 			// enable history API fallback so html5 history API routing works.
 			// this is a good default that will come in handy as projects grow.
 			historyApiFallback: true,
@@ -10,7 +10,7 @@ exports.devServer = function(options) {
 			hot: true,
 			inline: true,
 			// only display errors to reduce output trash
-			display: 'errors-only',
+			stats: 'errors-only',
 			// If you use Vagrant or Cloud9, set
       		// host: options.host || '0.0.0.0';
 		    // 0.0.0.0 is available to all network devices
@@ -20,9 +20,24 @@ exports.devServer = function(options) {
 		},
 		plugins: [
 		//as a good default for large projects, enable multi-pass compilation for better performance
-			new Webpack.hotModuleReplacementPlugin({
+			new webpack.HotModuleReplacementPlugin({
 				multiStep: true
 			})
 		]
 	}
+}
+
+exports.setupCSS = function(paths) {
+	return {
+		module: {
+			loaders: [
+				{
+					test: /\.css$/,
+          			loaders: ['style', 'css'],
+          			include: paths
+				}
+			]
+		}
+	}
+
 }
